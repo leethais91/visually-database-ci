@@ -1,0 +1,109 @@
+# Database Documentation & ERD Visualization Workflow
+# Automatically generates database documentation and visual ER diagrams when migrations change
+
+name: Generate DB Documentation to Repo
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'database/migrations/**'  # Trigger on migration changes
+      - '.tbls.yml'               # Trigger on tbls config changes
+  workflow_dispatch:             # Allow manual trigger
+
+permissions:
+  contents: write                # Required for git-auto-commit-action
+
+jobs:
+  build-and-commit:
+    runs-on: ubuntu-latest
+
+    # MySQL service container for running migrations
+    services:
+      mysql:
+        image: mysql:8.0
+        env:
+          MYSQL_ROOT_PASSWORD: root
+          MYSQL_DATABASE: laravel_test
+        ports:
+          - 3306:3306
+        options: >-
+          --health-cmd="mysqladmin ping"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=3
+
+    steps:
+      # Checkout repository code
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      # Setup PHP environment with required extensions
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.4'
+          extensions: pdo_mysql
+
+      # Get Composer cache directory for caching
+      - name: Get Composer Cache Directory
+        id: composer-cache
+        run: echo "dir=$(composer config cache-files-dir)" >> $GITHUB_OUTPUT
+
+      # Cache Composer dependencies to speed up builds
+      - name: Cache Composer dependencies
+        uses: actions/cache@v4
+        with:
+          path: ${{ steps.composer-cache.outputs.dir }}
+          key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-composer-
+
+      # Prepare Laravel environment file
+      - name: Prepare environment
+        run: cp .env.example .env
+
+      # Install Composer dependencies
+      - name: Install Composer dependencies
+        run: composer install --no-progress --no-interaction --no-dev --prefer-dist --no-scripts
+
+      # Run database migrations
+      - name: Run database migrations
+        run: php artisan migrate --force
+        env:
+          DB_CONNECTION: mysql
+          DB_HOST: 127.0.0.1
+          DB_PORT: 3306
+          DB_DATABASE: laravel_test
+          DB_USERNAME: root
+          DB_PASSWORD: root
+
+      # Setup tbls - Documentation as Code tool for database
+      - name: Setup tbls
+        uses: k1LoW/setup-tbls@v1
+
+      # Generate database documentation (Markdown + JSON schema)
+      # -f flag forces overwrite of existing documentation
+      - name: Generate database documentation
+        run: tbls doc -f
+
+      # Build visual ER diagrams using Liam ERD CLI
+      # Reads schema.json and generates interactive HTML visualization
+      - name: Build visual ER diagrams
+        run: |
+          # Use npx to run liam CLI without permanent installation
+          npx @liam-hq/cli erd build \
+            --input docs/database/schema.json \
+            --output-dir docs/database/visual \
+            --format tbls
+
+      # Commit and push generated documentation back to repository
+      # [skip ci] prevents triggering this workflow again
+      - name: Commit and push documentation
+        uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          commit_message: "chore: update database documentation [skip ci]"
+          file_pattern: 'docs/database/**'  # Only commit docs folder changes
+
+      # Note: Upload artifact step removed as documentation is committed to repo

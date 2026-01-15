@@ -1,0 +1,33 @@
+# tbls configuration - Documentation as Code for Database Schema
+# See: https://github.com/k1LoW/tbls
+
+# Database connection string
+# Format: mysql://username:password@host:port/database
+dsn: mysql://root:root@127.0.0.1:3306/laravel_test
+
+# Output directory for generated documentation
+docPath: docs/database
+
+# Formatting options
+format:
+  adjust: true  # Adjust column widths for better readability
+  sort: true    # Sort tables and columns alphabetically
+
+# Output formats
+# - markdown: Generates individual .md files for each table
+# - json: Required for Liam ERD visualizer
+outputs:
+  - markdown
+  - json
+
+# Exclude system tables that don't need documentation
+exclude:
+  - migrations              # Laravel migration tracking
+  - password_reset_tokens   # Laravel password resets
+  - failed_jobs             # Laravel failed job queue
+  - personal_access_tokens  # Laravel API tokens
+  - cache                   # Laravel cache table
+  - cache_locks             # Laravel cache locks
+  - jobs                    # Laravel job queue
+  - job_batches             # Laravel job batching
+  - sessions                # Laravel sessions
