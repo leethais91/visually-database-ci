@@ -57,7 +57,36 @@ CREATE TABLE `payments` (
 
 ## Relations
 
-![er](payments.svg)
+```mermaid
+erDiagram
+
+"payments" }o--|| "orders" : "FOREIGN KEY (order_id) REFERENCES orders (id)"
+
+"payments" {
+  decimal_10_2_ amount
+  timestamp created_at
+  bigint_unsigned id PK
+  bigint_unsigned order_id FK
+  timestamp paid_at
+  varchar_255_ payment_method
+  enum__pending___completed___failed___refunded__ status
+  varchar_255_ transaction_id
+  timestamp updated_at
+}
+"orders" {
+  timestamp created_at
+  bigint_unsigned id PK
+  varchar_255_ order_number
+  varchar_255_ shipping_address
+  varchar_255_ shipping_city
+  varchar_255_ shipping_country
+  varchar_255_ shipping_phone
+  enum__pending___processing___completed___cancelled__ status
+  decimal_10_2_ total_amount
+  timestamp updated_at
+  bigint_unsigned user_id FK
+}
+```
 
 ---
 

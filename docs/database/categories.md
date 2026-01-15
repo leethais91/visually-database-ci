@@ -57,7 +57,37 @@ CREATE TABLE `categories` (
 
 ## Relations
 
-![er](categories.svg)
+```mermaid
+erDiagram
+
+"categories" }o--o| "categories" : "FOREIGN KEY (parent_id) REFERENCES categories (id)"
+"products" }o--o| "categories" : "FOREIGN KEY (category_id) REFERENCES categories (id)"
+
+"categories" {
+  timestamp created_at
+  text description
+  bigint_unsigned id PK
+  tinyint_1_ is_active
+  varchar_255_ name
+  bigint_unsigned parent_id FK
+  varchar_255_ slug
+  int sort_order
+  timestamp updated_at
+}
+"products" {
+  bigint_unsigned category_id FK
+  timestamp created_at
+  timestamp deleted_at
+  text description
+  bigint_unsigned id PK
+  tinyint_1_ is_active
+  varchar_255_ name
+  decimal_10_2_ price
+  varchar_255_ slug
+  int stock
+  timestamp updated_at
+}
+```
 
 ---
 

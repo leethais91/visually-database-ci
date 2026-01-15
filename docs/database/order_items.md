@@ -56,7 +56,49 @@ CREATE TABLE `order_items` (
 
 ## Relations
 
-![er](order_items.svg)
+```mermaid
+erDiagram
+
+"order_items" }o--|| "orders" : "FOREIGN KEY (order_id) REFERENCES orders (id)"
+"order_items" }o--|| "products" : "FOREIGN KEY (product_id) REFERENCES products (id)"
+
+"order_items" {
+  timestamp created_at
+  bigint_unsigned id PK
+  bigint_unsigned order_id FK
+  bigint_unsigned product_id FK
+  int quantity
+  decimal_10_2_ subtotal
+  decimal_10_2_ unit_price
+  timestamp updated_at
+}
+"orders" {
+  timestamp created_at
+  bigint_unsigned id PK
+  varchar_255_ order_number
+  varchar_255_ shipping_address
+  varchar_255_ shipping_city
+  varchar_255_ shipping_country
+  varchar_255_ shipping_phone
+  enum__pending___processing___completed___cancelled__ status
+  decimal_10_2_ total_amount
+  timestamp updated_at
+  bigint_unsigned user_id FK
+}
+"products" {
+  bigint_unsigned category_id FK
+  timestamp created_at
+  timestamp deleted_at
+  text description
+  bigint_unsigned id PK
+  tinyint_1_ is_active
+  varchar_255_ name
+  decimal_10_2_ price
+  varchar_255_ slug
+  int stock
+  timestamp updated_at
+}
+```
 
 ---
 

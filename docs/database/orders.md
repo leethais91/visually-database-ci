@@ -61,7 +61,58 @@ CREATE TABLE `orders` (
 
 ## Relations
 
-![er](orders.svg)
+```mermaid
+erDiagram
+
+"order_items" }o--|| "orders" : "FOREIGN KEY (order_id) REFERENCES orders (id)"
+"payments" }o--|| "orders" : "FOREIGN KEY (order_id) REFERENCES orders (id)"
+"orders" }o--|| "users" : "FOREIGN KEY (user_id) REFERENCES users (id)"
+
+"orders" {
+  timestamp created_at
+  bigint_unsigned id PK
+  varchar_255_ order_number
+  varchar_255_ shipping_address
+  varchar_255_ shipping_city
+  varchar_255_ shipping_country
+  varchar_255_ shipping_phone
+  enum__pending___processing___completed___cancelled__ status
+  decimal_10_2_ total_amount
+  timestamp updated_at
+  bigint_unsigned user_id FK
+}
+"order_items" {
+  timestamp created_at
+  bigint_unsigned id PK
+  bigint_unsigned order_id FK
+  bigint_unsigned product_id FK
+  int quantity
+  decimal_10_2_ subtotal
+  decimal_10_2_ unit_price
+  timestamp updated_at
+}
+"payments" {
+  decimal_10_2_ amount
+  timestamp created_at
+  bigint_unsigned id PK
+  bigint_unsigned order_id FK
+  timestamp paid_at
+  varchar_255_ payment_method
+  enum__pending___completed___failed___refunded__ status
+  varchar_255_ transaction_id
+  timestamp updated_at
+}
+"users" {
+  timestamp created_at
+  varchar_255_ email
+  timestamp email_verified_at
+  bigint_unsigned id PK
+  varchar_255_ name
+  varchar_255_ password
+  varchar_100_ remember_token
+  timestamp updated_at
+}
+```
 
 ---
 
