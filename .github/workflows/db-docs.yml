@@ -86,7 +86,7 @@ jobs:
       # Generate database documentation (Markdown + JSON schema)
       # -f flag forces overwrite of existing documentation
       - name: Generate database documentation
-        run: tbls doc -f
+        run: tbls doc -f --er-format mermaid
 
       # Build visual ER diagrams using Liam ERD CLI
       # Reads schema.json and generates interactive HTML visualization

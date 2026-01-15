@@ -18,6 +18,7 @@ format:
 # - json: Required for Liam ERD visualizer
 outputs:
   - markdown
+  - mermaid
   - json
 
 # Exclude system tables that don't need documentation
