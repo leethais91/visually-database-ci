@@ -1,0 +1,765 @@
+{
+  "name": "laravel_test",
+  "tables": [
+    {
+      "name": "categories",
+      "type": "BASE TABLE",
+      "columns": [
+        {
+          "name": "created_at",
+          "type": "timestamp",
+          "nullable": true
+        },
+        {
+          "name": "description",
+          "type": "text",
+          "nullable": true
+        },
+        {
+          "name": "id",
+          "type": "bigint unsigned",
+          "nullable": false,
+          "extra_def": "auto_increment"
+        },
+        {
+          "name": "is_active",
+          "type": "tinyint(1)",
+          "nullable": false,
+          "default": "1"
+        },
+        {
+          "name": "name",
+          "type": "varchar(255)",
+          "nullable": false
+        },
+        {
+          "name": "parent_id",
+          "type": "bigint unsigned",
+          "nullable": true
+        },
+        {
+          "name": "slug",
+          "type": "varchar(255)",
+          "nullable": false
+        },
+        {
+          "name": "sort_order",
+          "type": "int",
+          "nullable": false,
+          "default": "0"
+        },
+        {
+          "name": "updated_at",
+          "type": "timestamp",
+          "nullable": true
+        }
+      ],
+      "indexes": [
+        {
+          "name": "PRIMARY",
+          "def": "PRIMARY KEY (id) USING BTREE",
+          "table": "categories",
+          "columns": [
+            "id"
+          ]
+        },
+        {
+          "name": "categories_parent_id_foreign",
+          "def": "KEY categories_parent_id_foreign (parent_id) USING BTREE",
+          "table": "categories",
+          "columns": [
+            "parent_id"
+          ]
+        },
+        {
+          "name": "categories_slug_unique",
+          "def": "UNIQUE KEY categories_slug_unique (slug) USING BTREE",
+          "table": "categories",
+          "columns": [
+            "slug"
+          ]
+        }
+      ],
+      "constraints": [
+        {
+          "name": "PRIMARY",
+          "type": "PRIMARY KEY",
+          "def": "PRIMARY KEY (id)",
+          "table": "categories",
+          "columns": [
+            "id"
+          ]
+        },
+        {
+          "name": "categories_parent_id_foreign",
+          "type": "FOREIGN KEY",
+          "def": "FOREIGN KEY (parent_id) REFERENCES categories (id)",
+          "table": "categories",
+          "referenced_table": "categories",
+          "columns": [
+            "parent_id"
+          ],
+          "referenced_columns": [
+            "id"
+          ]
+        },
+        {
+          "name": "categories_slug_unique",
+          "type": "UNIQUE",
+          "def": "UNIQUE KEY categories_slug_unique (slug)",
+          "table": "categories",
+          "columns": [
+            "slug"
+          ]
+        }
+      ],
+      "def": "CREATE TABLE `categories` (\n  `id` bigint unsigned NOT NULL AUTO_INCREMENT,\n  `name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,\n  `slug` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,\n  `description` text COLLATE utf8mb4_unicode_ci,\n  `is_active` tinyint(1) NOT NULL DEFAULT '1',\n  `parent_id` bigint unsigned DEFAULT NULL,\n  `sort_order` int NOT NULL DEFAULT '0',\n  `created_at` timestamp NULL DEFAULT NULL,\n  `updated_at` timestamp NULL DEFAULT NULL,\n  PRIMARY KEY (`id`),\n  UNIQUE KEY `categories_slug_unique` (`slug`),\n  KEY `categories_parent_id_foreign` (`parent_id`),\n  CONSTRAINT `categories_parent_id_foreign` FOREIGN KEY (`parent_id`) REFERENCES `categories` (`id`) ON DELETE SET NULL\n) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci"
+    },
+    {
+      "name": "order_items",
+      "type": "BASE TABLE",
+      "columns": [
+        {
+          "name": "created_at",
+          "type": "timestamp",
+          "nullable": true
+        },
+        {
+          "name": "id",
+          "type": "bigint unsigned",
+          "nullable": false,
+          "extra_def": "auto_increment"
+        },
+        {
+          "name": "order_id",
+          "type": "bigint unsigned",
+          "nullable": false
+        },
+        {
+          "name": "product_id",
+          "type": "bigint unsigned",
+          "nullable": false
+        },
+        {
+          "name": "quantity",
+          "type": "int",
+          "nullable": false
+        },
+        {
+          "name": "subtotal",
+          "type": "decimal(10,2)",
+          "nullable": false
+        },
+        {
+          "name": "unit_price",
+          "type": "decimal(10,2)",
+          "nullable": false
+        },
+        {
+          "name": "updated_at",
+          "type": "timestamp",
+          "nullable": true
+        }
+      ],
+      "indexes": [
+        {
+          "name": "PRIMARY",
+          "def": "PRIMARY KEY (id) USING BTREE",
+          "table": "order_items",
+          "columns": [
+            "id"
+          ]
+        },
+        {
+          "name": "order_items_order_id_foreign",
+          "def": "KEY order_items_order_id_foreign (order_id) USING BTREE",
+          "table": "order_items",
+          "columns": [
+            "order_id"
+          ]
+        },
+        {
+          "name": "order_items_product_id_foreign",
+          "def": "KEY order_items_product_id_foreign (product_id) USING BTREE",
+          "table": "order_items",
+          "columns": [
+            "product_id"
+          ]
+        }
+      ],
+      "constraints": [
+        {
+          "name": "PRIMARY",
+          "type": "PRIMARY KEY",
+          "def": "PRIMARY KEY (id)",
+          "table": "order_items",
+          "columns": [
+            "id"
+          ]
+        },
+        {
+          "name": "order_items_order_id_foreign",
+          "type": "FOREIGN KEY",
+          "def": "FOREIGN KEY (order_id) REFERENCES orders (id)",
+          "table": "order_items",
+          "referenced_table": "orders",
+          "columns": [
+            "order_id"
+          ],
+          "referenced_columns": [
+            "id"
+          ]
+        },
+        {
+          "name": "order_items_product_id_foreign",
+          "type": "FOREIGN KEY",
+          "def": "FOREIGN KEY (product_id) REFERENCES products (id)",
+          "table": "order_items",
+          "referenced_table": "products",
+          "columns": [
+            "product_id"
+          ],
+          "referenced_columns": [
+            "id"
+          ]
+        }
+      ],
+      "def": "CREATE TABLE `order_items` (\n  `id` bigint unsigned NOT NULL AUTO_INCREMENT,\n  `order_id` bigint unsigned NOT NULL,\n  `product_id` bigint unsigned NOT NULL,\n  `quantity` int NOT NULL,\n  `unit_price` decimal(10,2) NOT NULL,\n  `subtotal` decimal(10,2) NOT NULL,\n  `created_at` timestamp NULL DEFAULT NULL,\n  `updated_at` timestamp NULL DEFAULT NULL,\n  PRIMARY KEY (`id`),\n  KEY `order_items_order_id_foreign` (`order_id`),\n  KEY `order_items_product_id_foreign` (`product_id`),\n  CONSTRAINT `order_items_order_id_foreign` FOREIGN KEY (`order_id`) REFERENCES `orders` (`id`) ON DELETE CASCADE,\n  CONSTRAINT `order_items_product_id_foreign` FOREIGN KEY (`product_id`) REFERENCES `products` (`id`) ON DELETE CASCADE\n) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci"
+    },
+    {
+      "name": "orders",
+      "type": "BASE TABLE",
+      "columns": [
+        {
+          "name": "created_at",
+          "type": "timestamp",
+          "nullable": true
+        },
+        {
+          "name": "id",
+          "type": "bigint unsigned",
+          "nullable": false,
+          "extra_def": "auto_increment"
+        },
+        {
+          "name": "order_number",
+          "type": "varchar(255)",
+          "nullable": false
+        },
+        {
+          "name": "shipping_address",
+          "type": "varchar(255)",
+          "nullable": false
+        },
+        {
+          "name": "shipping_city",
+          "type": "varchar(255)",
+          "nullable": false
+        },
+        {
+          "name": "shipping_country",
+          "type": "varchar(255)",
+          "nullable": false
+        },
+        {
+          "name": "shipping_phone",
+          "type": "varchar(255)",
+          "nullable": false
+        },
+        {
+          "name": "status",
+          "type": "enum('pending','processing','completed','cancelled')",
+          "nullable": false,
+          "default": "pending"
+        },
+        {
+          "name": "total_amount",
+          "type": "decimal(10,2)",
+          "nullable": false
+        },
+        {
+          "name": "updated_at",
+          "type": "timestamp",
+          "nullable": true
+        },
+        {
+          "name": "user_id",
+          "type": "bigint unsigned",
+          "nullable": false
+        }
+      ],
+      "indexes": [
+        {
+          "name": "PRIMARY",
+          "def": "PRIMARY KEY (id) USING BTREE",
+          "table": "orders",
+          "columns": [
+            "id"
+          ]
+        },
+        {
+          "name": "orders_order_number_unique",
+          "def": "UNIQUE KEY orders_order_number_unique (order_number) USING BTREE",
+          "table": "orders",
+          "columns": [
+            "order_number"
+          ]
+        },
+        {
+          "name": "orders_user_id_foreign",
+          "def": "KEY orders_user_id_foreign (user_id) USING BTREE",
+          "table": "orders",
+          "columns": [
+            "user_id"
+          ]
+        }
+      ],
+      "constraints": [
+        {
+          "name": "PRIMARY",
+          "type": "PRIMARY KEY",
+          "def": "PRIMARY KEY (id)",
+          "table": "orders",
+          "columns": [
+            "id"
+          ]
+        },
+        {
+          "name": "orders_order_number_unique",
+          "type": "UNIQUE",
+          "def": "UNIQUE KEY orders_order_number_unique (order_number)",
+          "table": "orders",
+          "columns": [
+            "order_number"
+          ]
+        },
+        {
+          "name": "orders_user_id_foreign",
+          "type": "FOREIGN KEY",
+          "def": "FOREIGN KEY (user_id) REFERENCES users (id)",
+          "table": "orders",
+          "referenced_table": "users",
+          "columns": [
+            "user_id"
+          ],
+          "referenced_columns": [
+            "id"
+          ]
+        }
+      ],
+      "def": "CREATE TABLE `orders` (\n  `id` bigint unsigned NOT NULL AUTO_INCREMENT,\n  `user_id` bigint unsigned NOT NULL,\n  `order_number` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,\n  `total_amount` decimal(10,2) NOT NULL,\n  `status` enum('pending','processing','completed','cancelled') COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'pending',\n  `shipping_address` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,\n  `shipping_city` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,\n  `shipping_country` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,\n  `shipping_phone` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,\n  `created_at` timestamp NULL DEFAULT NULL,\n  `updated_at` timestamp NULL DEFAULT NULL,\n  PRIMARY KEY (`id`),\n  UNIQUE KEY `orders_order_number_unique` (`order_number`),\n  KEY `orders_user_id_foreign` (`user_id`),\n  CONSTRAINT `orders_user_id_foreign` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE\n) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci"
+    },
+    {
+      "name": "payments",
+      "type": "BASE TABLE",
+      "columns": [
+        {
+          "name": "amount",
+          "type": "decimal(10,2)",
+          "nullable": false
+        },
+        {
+          "name": "created_at",
+          "type": "timestamp",
+          "nullable": true
+        },
+        {
+          "name": "id",
+          "type": "bigint unsigned",
+          "nullable": false,
+          "extra_def": "auto_increment"
+        },
+        {
+          "name": "order_id",
+          "type": "bigint unsigned",
+          "nullable": false
+        },
+        {
+          "name": "paid_at",
+          "type": "timestamp",
+          "nullable": true
+        },
+        {
+          "name": "payment_method",
+          "type": "varchar(255)",
+          "nullable": false
+        },
+        {
+          "name": "status",
+          "type": "enum('pending','completed','failed','refunded')",
+          "nullable": false,
+          "default": "pending"
+        },
+        {
+          "name": "transaction_id",
+          "type": "varchar(255)",
+          "nullable": false
+        },
+        {
+          "name": "updated_at",
+          "type": "timestamp",
+          "nullable": true
+        }
+      ],
+      "indexes": [
+        {
+          "name": "PRIMARY",
+          "def": "PRIMARY KEY (id) USING BTREE",
+          "table": "payments",
+          "columns": [
+            "id"
+          ]
+        },
+        {
+          "name": "payments_order_id_foreign",
+          "def": "KEY payments_order_id_foreign (order_id) USING BTREE",
+          "table": "payments",
+          "columns": [
+            "order_id"
+          ]
+        },
+        {
+          "name": "payments_transaction_id_unique",
+          "def": "UNIQUE KEY payments_transaction_id_unique (transaction_id) USING BTREE",
+          "table": "payments",
+          "columns": [
+            "transaction_id"
+          ]
+        }
+      ],
+      "constraints": [
+        {
+          "name": "PRIMARY",
+          "type": "PRIMARY KEY",
+          "def": "PRIMARY KEY (id)",
+          "table": "payments",
+          "columns": [
+            "id"
+          ]
+        },
+        {
+          "name": "payments_order_id_foreign",
+          "type": "FOREIGN KEY",
+          "def": "FOREIGN KEY (order_id) REFERENCES orders (id)",
+          "table": "payments",
+          "referenced_table": "orders",
+          "columns": [
+            "order_id"
+          ],
+          "referenced_columns": [
+            "id"
+          ]
+        },
+        {
+          "name": "payments_transaction_id_unique",
+          "type": "UNIQUE",
+          "def": "UNIQUE KEY payments_transaction_id_unique (transaction_id)",
+          "table": "payments",
+          "columns": [
+            "transaction_id"
+          ]
+        }
+      ],
+      "def": "CREATE TABLE `payments` (\n  `id` bigint unsigned NOT NULL AUTO_INCREMENT,\n  `order_id` bigint unsigned NOT NULL,\n  `payment_method` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,\n  `transaction_id` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,\n  `amount` decimal(10,2) NOT NULL,\n  `status` enum('pending','completed','failed','refunded') COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'pending',\n  `paid_at` timestamp NULL DEFAULT NULL,\n  `created_at` timestamp NULL DEFAULT NULL,\n  `updated_at` timestamp NULL DEFAULT NULL,\n  PRIMARY KEY (`id`),\n  UNIQUE KEY `payments_transaction_id_unique` (`transaction_id`),\n  KEY `payments_order_id_foreign` (`order_id`),\n  CONSTRAINT `payments_order_id_foreign` FOREIGN KEY (`order_id`) REFERENCES `orders` (`id`) ON DELETE CASCADE\n) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci"
+    },
+    {
+      "name": "products",
+      "type": "BASE TABLE",
+      "columns": [
+        {
+          "name": "category_id",
+          "type": "bigint unsigned",
+          "nullable": true
+        },
+        {
+          "name": "created_at",
+          "type": "timestamp",
+          "nullable": true
+        },
+        {
+          "name": "deleted_at",
+          "type": "timestamp",
+          "nullable": true
+        },
+        {
+          "name": "description",
+          "type": "text",
+          "nullable": true
+        },
+        {
+          "name": "id",
+          "type": "bigint unsigned",
+          "nullable": false,
+          "extra_def": "auto_increment"
+        },
+        {
+          "name": "is_active",
+          "type": "tinyint(1)",
+          "nullable": false,
+          "default": "1"
+        },
+        {
+          "name": "name",
+          "type": "varchar(255)",
+          "nullable": false
+        },
+        {
+          "name": "price",
+          "type": "decimal(10,2)",
+          "nullable": false
+        },
+        {
+          "name": "slug",
+          "type": "varchar(255)",
+          "nullable": false
+        },
+        {
+          "name": "stock",
+          "type": "int",
+          "nullable": false,
+          "default": "0"
+        },
+        {
+          "name": "updated_at",
+          "type": "timestamp",
+          "nullable": true
+        }
+      ],
+      "indexes": [
+        {
+          "name": "PRIMARY",
+          "def": "PRIMARY KEY (id) USING BTREE",
+          "table": "products",
+          "columns": [
+            "id"
+          ]
+        },
+        {
+          "name": "products_category_id_foreign",
+          "def": "KEY products_category_id_foreign (category_id) USING BTREE",
+          "table": "products",
+          "columns": [
+            "category_id"
+          ]
+        },
+        {
+          "name": "products_slug_unique",
+          "def": "UNIQUE KEY products_slug_unique (slug) USING BTREE",
+          "table": "products",
+          "columns": [
+            "slug"
+          ]
+        }
+      ],
+      "constraints": [
+        {
+          "name": "PRIMARY",
+          "type": "PRIMARY KEY",
+          "def": "PRIMARY KEY (id)",
+          "table": "products",
+          "columns": [
+            "id"
+          ]
+        },
+        {
+          "name": "products_category_id_foreign",
+          "type": "FOREIGN KEY",
+          "def": "FOREIGN KEY (category_id) REFERENCES categories (id)",
+          "table": "products",
+          "referenced_table": "categories",
+          "columns": [
+            "category_id"
+          ],
+          "referenced_columns": [
+            "id"
+          ]
+        },
+        {
+          "name": "products_slug_unique",
+          "type": "UNIQUE",
+          "def": "UNIQUE KEY products_slug_unique (slug)",
+          "table": "products",
+          "columns": [
+            "slug"
+          ]
+        }
+      ],
+      "def": "CREATE TABLE `products` (\n  `id` bigint unsigned NOT NULL AUTO_INCREMENT,\n  `name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,\n  `slug` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,\n  `description` text COLLATE utf8mb4_unicode_ci,\n  `price` decimal(10,2) NOT NULL,\n  `stock` int NOT NULL DEFAULT '0',\n  `is_active` tinyint(1) NOT NULL DEFAULT '1',\n  `category_id` bigint unsigned DEFAULT NULL,\n  `created_at` timestamp NULL DEFAULT NULL,\n  `updated_at` timestamp NULL DEFAULT NULL,\n  `deleted_at` timestamp NULL DEFAULT NULL,\n  PRIMARY KEY (`id`),\n  UNIQUE KEY `products_slug_unique` (`slug`),\n  KEY `products_category_id_foreign` (`category_id`),\n  CONSTRAINT `products_category_id_foreign` FOREIGN KEY (`category_id`) REFERENCES `categories` (`id`) ON DELETE SET NULL\n) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci"
+    },
+    {
+      "name": "users",
+      "type": "BASE TABLE",
+      "columns": [
+        {
+          "name": "created_at",
+          "type": "timestamp",
+          "nullable": true
+        },
+        {
+          "name": "email",
+          "type": "varchar(255)",
+          "nullable": false
+        },
+        {
+          "name": "email_verified_at",
+          "type": "timestamp",
+          "nullable": true
+        },
+        {
+          "name": "id",
+          "type": "bigint unsigned",
+          "nullable": false,
+          "extra_def": "auto_increment"
+        },
+        {
+          "name": "name",
+          "type": "varchar(255)",
+          "nullable": false
+        },
+        {
+          "name": "password",
+          "type": "varchar(255)",
+          "nullable": false
+        },
+        {
+          "name": "remember_token",
+          "type": "varchar(100)",
+          "nullable": true
+        },
+        {
+          "name": "updated_at",
+          "type": "timestamp",
+          "nullable": true
+        }
+      ],
+      "indexes": [
+        {
+          "name": "PRIMARY",
+          "def": "PRIMARY KEY (id) USING BTREE",
+          "table": "users",
+          "columns": [
+            "id"
+          ]
+        },
+        {
+          "name": "users_email_unique",
+          "def": "UNIQUE KEY users_email_unique (email) USING BTREE",
+          "table": "users",
+          "columns": [
+            "email"
+          ]
+        }
+      ],
+      "constraints": [
+        {
+          "name": "PRIMARY",
+          "type": "PRIMARY KEY",
+          "def": "PRIMARY KEY (id)",
+          "table": "users",
+          "columns": [
+            "id"
+          ]
+        },
+        {
+          "name": "users_email_unique",
+          "type": "UNIQUE",
+          "def": "UNIQUE KEY users_email_unique (email)",
+          "table": "users",
+          "columns": [
+            "email"
+          ]
+        }
+      ],
+      "def": "CREATE TABLE `users` (\n  `id` bigint unsigned NOT NULL AUTO_INCREMENT,\n  `name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,\n  `email` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,\n  `email_verified_at` timestamp NULL DEFAULT NULL,\n  `password` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,\n  `remember_token` varchar(100) COLLATE utf8mb4_unicode_ci DEFAULT NULL,\n  `created_at` timestamp NULL DEFAULT NULL,\n  `updated_at` timestamp NULL DEFAULT NULL,\n  PRIMARY KEY (`id`),\n  UNIQUE KEY `users_email_unique` (`email`)\n) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci"
+    }
+  ],
+  "relations": [
+    {
+      "table": "categories",
+      "columns": [
+        "parent_id"
+      ],
+      "cardinality": "zero_or_more",
+      "parent_table": "categories",
+      "parent_columns": [
+        "id"
+      ],
+      "parent_cardinality": "zero_or_one",
+      "def": "FOREIGN KEY (parent_id) REFERENCES categories (id)"
+    },
+    {
+      "table": "order_items",
+      "columns": [
+        "order_id"
+      ],
+      "cardinality": "zero_or_more",
+      "parent_table": "orders",
+      "parent_columns": [
+        "id"
+      ],
+      "parent_cardinality": "exactly_one",
+      "def": "FOREIGN KEY (order_id) REFERENCES orders (id)"
+    },
+    {
+      "table": "order_items",
+      "columns": [
+        "product_id"
+      ],
+      "cardinality": "zero_or_more",
+      "parent_table": "products",
+      "parent_columns": [
+        "id"
+      ],
+      "parent_cardinality": "exactly_one",
+      "def": "FOREIGN KEY (product_id) REFERENCES products (id)"
+    },
+    {
+      "table": "orders",
+      "columns": [
+        "user_id"
+      ],
+      "cardinality": "zero_or_more",
+      "parent_table": "users",
+      "parent_columns": [
+        "id"
+      ],
+      "parent_cardinality": "exactly_one",
+      "def": "FOREIGN KEY (user_id) REFERENCES users (id)"
+    },
+    {
+      "table": "payments",
+      "columns": [
+        "order_id"
+      ],
+      "cardinality": "zero_or_more",
+      "parent_table": "orders",
+      "parent_columns": [
+        "id"
+      ],
+      "parent_cardinality": "exactly_one",
+      "def": "FOREIGN KEY (order_id) REFERENCES orders (id)"
+    },
+    {
+      "table": "products",
+      "columns": [
+        "category_id"
+      ],
+      "cardinality": "zero_or_more",
+      "parent_table": "categories",
+      "parent_columns": [
+        "id"
+      ],
+      "parent_cardinality": "zero_or_one",
+      "def": "FOREIGN KEY (category_id) REFERENCES categories (id)"
+    }
+  ],
+  "driver": {
+    "name": "mysql",
+    "database_version": "8.0.44",
+    "meta": {
+      "dict": {
+        "Functions": "Stored procedures and functions"
+      }
+    }
+  }
+}

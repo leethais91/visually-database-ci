@@ -1,0 +1,805 @@
+{
+  "tables": {
+    "categories": {
+      "name": "categories",
+      "comment": null,
+      "columns": {
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp",
+          "default": null,
+          "check": null,
+          "comment": null,
+          "notNull": false
+        },
+        "description": {
+          "name": "description",
+          "type": "text",
+          "default": null,
+          "check": null,
+          "comment": null,
+          "notNull": false
+        },
+        "id": {
+          "name": "id",
+          "type": "bigint unsigned",
+          "default": null,
+          "check": null,
+          "comment": null,
+          "notNull": true
+        },
+        "is_active": {
+          "name": "is_active",
+          "type": "tinyint(1)",
+          "default": 1,
+          "check": null,
+          "comment": null,
+          "notNull": true
+        },
+        "name": {
+          "name": "name",
+          "type": "varchar(255)",
+          "default": null,
+          "check": null,
+          "comment": null,
+          "notNull": true
+        },
+        "parent_id": {
+          "name": "parent_id",
+          "type": "bigint unsigned",
+          "default": null,
+          "check": null,
+          "comment": null,
+          "notNull": false
+        },
+        "slug": {
+          "name": "slug",
+          "type": "varchar(255)",
+          "default": null,
+          "check": null,
+          "comment": null,
+          "notNull": true
+        },
+        "sort_order": {
+          "name": "sort_order",
+          "type": "int",
+          "default": 0,
+          "check": null,
+          "comment": null,
+          "notNull": true
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "timestamp",
+          "default": null,
+          "check": null,
+          "comment": null,
+          "notNull": false
+        }
+      },
+      "indexes": {
+        "PRIMARY": {
+          "name": "PRIMARY",
+          "unique": false,
+          "columns": [
+            "id"
+          ],
+          "type": "btree"
+        },
+        "categories_parent_id_foreign": {
+          "name": "categories_parent_id_foreign",
+          "unique": false,
+          "columns": [
+            "parent_id"
+          ],
+          "type": "btree"
+        },
+        "categories_slug_unique": {
+          "name": "categories_slug_unique",
+          "unique": true,
+          "columns": [
+            "slug"
+          ],
+          "type": "btree"
+        }
+      },
+      "constraints": {
+        "PRIMARY": {
+          "type": "PRIMARY KEY",
+          "name": "PRIMARY",
+          "columnNames": [
+            "id"
+          ]
+        },
+        "categories_parent_id_foreign": {
+          "type": "FOREIGN KEY",
+          "name": "categories_parent_id_foreign",
+          "columnNames": [
+            "parent_id"
+          ],
+          "targetTableName": "categories",
+          "targetColumnNames": [
+            "id"
+          ],
+          "updateConstraint": "NO_ACTION",
+          "deleteConstraint": "NO_ACTION"
+        },
+        "categories_slug_unique": {
+          "type": "UNIQUE",
+          "name": "categories_slug_unique",
+          "columnNames": [
+            "slug"
+          ]
+        }
+      }
+    },
+    "order_items": {
+      "name": "order_items",
+      "comment": null,
+      "columns": {
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp",
+          "default": null,
+          "check": null,
+          "comment": null,
+          "notNull": false
+        },
+        "id": {
+          "name": "id",
+          "type": "bigint unsigned",
+          "default": null,
+          "check": null,
+          "comment": null,
+          "notNull": true
+        },
+        "order_id": {
+          "name": "order_id",
+          "type": "bigint unsigned",
+          "default": null,
+          "check": null,
+          "comment": null,
+          "notNull": true
+        },
+        "product_id": {
+          "name": "product_id",
+          "type": "bigint unsigned",
+          "default": null,
+          "check": null,
+          "comment": null,
+          "notNull": true
+        },
+        "quantity": {
+          "name": "quantity",
+          "type": "int",
+          "default": null,
+          "check": null,
+          "comment": null,
+          "notNull": true
+        },
+        "subtotal": {
+          "name": "subtotal",
+          "type": "decimal(10,2)",
+          "default": null,
+          "check": null,
+          "comment": null,
+          "notNull": true
+        },
+        "unit_price": {
+          "name": "unit_price",
+          "type": "decimal(10,2)",
+          "default": null,
+          "check": null,
+          "comment": null,
+          "notNull": true
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "timestamp",
+          "default": null,
+          "check": null,
+          "comment": null,
+          "notNull": false
+        }
+      },
+      "indexes": {
+        "PRIMARY": {
+          "name": "PRIMARY",
+          "unique": false,
+          "columns": [
+            "id"
+          ],
+          "type": "btree"
+        },
+        "order_items_order_id_foreign": {
+          "name": "order_items_order_id_foreign",
+          "unique": false,
+          "columns": [
+            "order_id"
+          ],
+          "type": "btree"
+        },
+        "order_items_product_id_foreign": {
+          "name": "order_items_product_id_foreign",
+          "unique": false,
+          "columns": [
+            "product_id"
+          ],
+          "type": "btree"
+        }
+      },
+      "constraints": {
+        "PRIMARY": {
+          "type": "PRIMARY KEY",
+          "name": "PRIMARY",
+          "columnNames": [
+            "id"
+          ]
+        },
+        "order_items_order_id_foreign": {
+          "type": "FOREIGN KEY",
+          "name": "order_items_order_id_foreign",
+          "columnNames": [
+            "order_id"
+          ],
+          "targetTableName": "orders",
+          "targetColumnNames": [
+            "id"
+          ],
+          "updateConstraint": "NO_ACTION",
+          "deleteConstraint": "NO_ACTION"
+        },
+        "order_items_product_id_foreign": {
+          "type": "FOREIGN KEY",
+          "name": "order_items_product_id_foreign",
+          "columnNames": [
+            "product_id"
+          ],
+          "targetTableName": "products",
+          "targetColumnNames": [
+            "id"
+          ],
+          "updateConstraint": "NO_ACTION",
+          "deleteConstraint": "NO_ACTION"
+        }
+      }
+    },
+    "orders": {
+      "name": "orders",
+      "comment": null,
+      "columns": {
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp",
+          "default": null,
+          "check": null,
+          "comment": null,
+          "notNull": false
+        },
+        "id": {
+          "name": "id",
+          "type": "bigint unsigned",
+          "default": null,
+          "check": null,
+          "comment": null,
+          "notNull": true
+        },
+        "order_number": {
+          "name": "order_number",
+          "type": "varchar(255)",
+          "default": null,
+          "check": null,
+          "comment": null,
+          "notNull": true
+        },
+        "shipping_address": {
+          "name": "shipping_address",
+          "type": "varchar(255)",
+          "default": null,
+          "check": null,
+          "comment": null,
+          "notNull": true
+        },
+        "shipping_city": {
+          "name": "shipping_city",
+          "type": "varchar(255)",
+          "default": null,
+          "check": null,
+          "comment": null,
+          "notNull": true
+        },
+        "shipping_country": {
+          "name": "shipping_country",
+          "type": "varchar(255)",
+          "default": null,
+          "check": null,
+          "comment": null,
+          "notNull": true
+        },
+        "shipping_phone": {
+          "name": "shipping_phone",
+          "type": "varchar(255)",
+          "default": null,
+          "check": null,
+          "comment": null,
+          "notNull": true
+        },
+        "status": {
+          "name": "status",
+          "type": "enum('pending','processing','completed','cancelled')",
+          "default": "pending",
+          "check": null,
+          "comment": null,
+          "notNull": true
+        },
+        "total_amount": {
+          "name": "total_amount",
+          "type": "decimal(10,2)",
+          "default": null,
+          "check": null,
+          "comment": null,
+          "notNull": true
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "timestamp",
+          "default": null,
+          "check": null,
+          "comment": null,
+          "notNull": false
+        },
+        "user_id": {
+          "name": "user_id",
+          "type": "bigint unsigned",
+          "default": null,
+          "check": null,
+          "comment": null,
+          "notNull": true
+        }
+      },
+      "indexes": {
+        "PRIMARY": {
+          "name": "PRIMARY",
+          "unique": false,
+          "columns": [
+            "id"
+          ],
+          "type": "btree"
+        },
+        "orders_order_number_unique": {
+          "name": "orders_order_number_unique",
+          "unique": true,
+          "columns": [
+            "order_number"
+          ],
+          "type": "btree"
+        },
+        "orders_user_id_foreign": {
+          "name": "orders_user_id_foreign",
+          "unique": false,
+          "columns": [
+            "user_id"
+          ],
+          "type": "btree"
+        }
+      },
+      "constraints": {
+        "PRIMARY": {
+          "type": "PRIMARY KEY",
+          "name": "PRIMARY",
+          "columnNames": [
+            "id"
+          ]
+        },
+        "orders_order_number_unique": {
+          "type": "UNIQUE",
+          "name": "orders_order_number_unique",
+          "columnNames": [
+            "order_number"
+          ]
+        },
+        "orders_user_id_foreign": {
+          "type": "FOREIGN KEY",
+          "name": "orders_user_id_foreign",
+          "columnNames": [
+            "user_id"
+          ],
+          "targetTableName": "users",
+          "targetColumnNames": [
+            "id"
+          ],
+          "updateConstraint": "NO_ACTION",
+          "deleteConstraint": "NO_ACTION"
+        }
+      }
+    },
+    "payments": {
+      "name": "payments",
+      "comment": null,
+      "columns": {
+        "amount": {
+          "name": "amount",
+          "type": "decimal(10,2)",
+          "default": null,
+          "check": null,
+          "comment": null,
+          "notNull": true
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp",
+          "default": null,
+          "check": null,
+          "comment": null,
+          "notNull": false
+        },
+        "id": {
+          "name": "id",
+          "type": "bigint unsigned",
+          "default": null,
+          "check": null,
+          "comment": null,
+          "notNull": true
+        },
+        "order_id": {
+          "name": "order_id",
+          "type": "bigint unsigned",
+          "default": null,
+          "check": null,
+          "comment": null,
+          "notNull": true
+        },
+        "paid_at": {
+          "name": "paid_at",
+          "type": "timestamp",
+          "default": null,
+          "check": null,
+          "comment": null,
+          "notNull": false
+        },
+        "payment_method": {
+          "name": "payment_method",
+          "type": "varchar(255)",
+          "default": null,
+          "check": null,
+          "comment": null,
+          "notNull": true
+        },
+        "status": {
+          "name": "status",
+          "type": "enum('pending','completed','failed','refunded')",
+          "default": "pending",
+          "check": null,
+          "comment": null,
+          "notNull": true
+        },
+        "transaction_id": {
+          "name": "transaction_id",
+          "type": "varchar(255)",
+          "default": null,
+          "check": null,
+          "comment": null,
+          "notNull": true
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "timestamp",
+          "default": null,
+          "check": null,
+          "comment": null,
+          "notNull": false
+        }
+      },
+      "indexes": {
+        "PRIMARY": {
+          "name": "PRIMARY",
+          "unique": false,
+          "columns": [
+            "id"
+          ],
+          "type": "btree"
+        },
+        "payments_order_id_foreign": {
+          "name": "payments_order_id_foreign",
+          "unique": false,
+          "columns": [
+            "order_id"
+          ],
+          "type": "btree"
+        },
+        "payments_transaction_id_unique": {
+          "name": "payments_transaction_id_unique",
+          "unique": true,
+          "columns": [
+            "transaction_id"
+          ],
+          "type": "btree"
+        }
+      },
+      "constraints": {
+        "PRIMARY": {
+          "type": "PRIMARY KEY",
+          "name": "PRIMARY",
+          "columnNames": [
+            "id"
+          ]
+        },
+        "payments_order_id_foreign": {
+          "type": "FOREIGN KEY",
+          "name": "payments_order_id_foreign",
+          "columnNames": [
+            "order_id"
+          ],
+          "targetTableName": "orders",
+          "targetColumnNames": [
+            "id"
+          ],
+          "updateConstraint": "NO_ACTION",
+          "deleteConstraint": "NO_ACTION"
+        },
+        "payments_transaction_id_unique": {
+          "type": "UNIQUE",
+          "name": "payments_transaction_id_unique",
+          "columnNames": [
+            "transaction_id"
+          ]
+        }
+      }
+    },
+    "products": {
+      "name": "products",
+      "comment": null,
+      "columns": {
+        "category_id": {
+          "name": "category_id",
+          "type": "bigint unsigned",
+          "default": null,
+          "check": null,
+          "comment": null,
+          "notNull": false
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp",
+          "default": null,
+          "check": null,
+          "comment": null,
+          "notNull": false
+        },
+        "deleted_at": {
+          "name": "deleted_at",
+          "type": "timestamp",
+          "default": null,
+          "check": null,
+          "comment": null,
+          "notNull": false
+        },
+        "description": {
+          "name": "description",
+          "type": "text",
+          "default": null,
+          "check": null,
+          "comment": null,
+          "notNull": false
+        },
+        "id": {
+          "name": "id",
+          "type": "bigint unsigned",
+          "default": null,
+          "check": null,
+          "comment": null,
+          "notNull": true
+        },
+        "is_active": {
+          "name": "is_active",
+          "type": "tinyint(1)",
+          "default": 1,
+          "check": null,
+          "comment": null,
+          "notNull": true
+        },
+        "name": {
+          "name": "name",
+          "type": "varchar(255)",
+          "default": null,
+          "check": null,
+          "comment": null,
+          "notNull": true
+        },
+        "price": {
+          "name": "price",
+          "type": "decimal(10,2)",
+          "default": null,
+          "check": null,
+          "comment": null,
+          "notNull": true
+        },
+        "slug": {
+          "name": "slug",
+          "type": "varchar(255)",
+          "default": null,
+          "check": null,
+          "comment": null,
+          "notNull": true
+        },
+        "stock": {
+          "name": "stock",
+          "type": "int",
+          "default": 0,
+          "check": null,
+          "comment": null,
+          "notNull": true
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "timestamp",
+          "default": null,
+          "check": null,
+          "comment": null,
+          "notNull": false
+        }
+      },
+      "indexes": {
+        "PRIMARY": {
+          "name": "PRIMARY",
+          "unique": false,
+          "columns": [
+            "id"
+          ],
+          "type": "btree"
+        },
+        "products_category_id_foreign": {
+          "name": "products_category_id_foreign",
+          "unique": false,
+          "columns": [
+            "category_id"
+          ],
+          "type": "btree"
+        },
+        "products_slug_unique": {
+          "name": "products_slug_unique",
+          "unique": true,
+          "columns": [
+            "slug"
+          ],
+          "type": "btree"
+        }
+      },
+      "constraints": {
+        "PRIMARY": {
+          "type": "PRIMARY KEY",
+          "name": "PRIMARY",
+          "columnNames": [
+            "id"
+          ]
+        },
+        "products_category_id_foreign": {
+          "type": "FOREIGN KEY",
+          "name": "products_category_id_foreign",
+          "columnNames": [
+            "category_id"
+          ],
+          "targetTableName": "categories",
+          "targetColumnNames": [
+            "id"
+          ],
+          "updateConstraint": "NO_ACTION",
+          "deleteConstraint": "NO_ACTION"
+        },
+        "products_slug_unique": {
+          "type": "UNIQUE",
+          "name": "products_slug_unique",
+          "columnNames": [
+            "slug"
+          ]
+        }
+      }
+    },
+    "users": {
+      "name": "users",
+      "comment": null,
+      "columns": {
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp",
+          "default": null,
+          "check": null,
+          "comment": null,
+          "notNull": false
+        },
+        "email": {
+          "name": "email",
+          "type": "varchar(255)",
+          "default": null,
+          "check": null,
+          "comment": null,
+          "notNull": true
+        },
+        "email_verified_at": {
+          "name": "email_verified_at",
+          "type": "timestamp",
+          "default": null,
+          "check": null,
+          "comment": null,
+          "notNull": false
+        },
+        "id": {
+          "name": "id",
+          "type": "bigint unsigned",
+          "default": null,
+          "check": null,
+          "comment": null,
+          "notNull": true
+        },
+        "name": {
+          "name": "name",
+          "type": "varchar(255)",
+          "default": null,
+          "check": null,
+          "comment": null,
+          "notNull": true
+        },
+        "password": {
+          "name": "password",
+          "type": "varchar(255)",
+          "default": null,
+          "check": null,
+          "comment": null,
+          "notNull": true
+        },
+        "remember_token": {
+          "name": "remember_token",
+          "type": "varchar(100)",
+          "default": null,
+          "check": null,
+          "comment": null,
+          "notNull": false
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "timestamp",
+          "default": null,
+          "check": null,
+          "comment": null,
+          "notNull": false
+        }
+      },
+      "indexes": {
+        "PRIMARY": {
+          "name": "PRIMARY",
+          "unique": false,
+          "columns": [
+            "id"
+          ],
+          "type": "btree"
+        },
+        "users_email_unique": {
+          "name": "users_email_unique",
+          "unique": true,
+          "columns": [
+            "email"
+          ],
+          "type": "btree"
+        }
+      },
+      "constraints": {
+        "PRIMARY": {
+          "type": "PRIMARY KEY",
+          "name": "PRIMARY",
+          "columnNames": [
+            "id"
+          ]
+        },
+        "users_email_unique": {
+          "type": "UNIQUE",
+          "name": "users_email_unique",
+          "columnNames": [
+            "email"
+          ]
+        }
+      }
+    }
+  },
+  "enums": {},
+  "extensions": {}
+}
